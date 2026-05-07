@@ -1,0 +1,32 @@
+{
+  "title": "Database Query Speed",
+  "tagline": "How different indexes affect performance on large datasets.",
+  "xAxisLabel": "Number of Records (millions)",
+  "yAxisLabel": "Query Time (ms)",
+  "curves": [
+    {
+      "id": "1",
+      "label": "Full Table Scan",
+      "color": "#ef4444",
+      "formula": "n => 0.8 * n + 5",
+      "code": "SELECT * FROM users WHERE email = 'x'",
+      "name": "Full Table Scan"
+    },
+    {
+      "id": "2",
+      "label": "B-Tree Index",
+      "color": "#10b981",
+      "formula": "n => 2 * Math.log2(n + 1) + 2",
+      "code": "CREATE INDEX idx_email ON users(email)",
+      "name": "B-Tree Index"
+    },
+    {
+      "id": "3",
+      "label": "Hash Index",
+      "color": "#3b82f6",
+      "formula": "n => 3",
+      "code": "CREATE INDEX idx_id ON users(id) USING HASH",
+      "name": "Hash Index"
+    }
+  ]
+}

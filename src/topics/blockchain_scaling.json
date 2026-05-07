@@ -1,0 +1,32 @@
+{
+  "title": "Blockchain Scalability",
+  "tagline": "Transaction latency vs network nodes.",
+  "xAxisLabel": "Number of Nodes",
+  "yAxisLabel": "Latency (s)",
+  "curves": [
+    {
+      "id": "1",
+      "label": "Proof of Work",
+      "color": "#f59e0b",
+      "formula": "n => 0.05 * n + 10",
+      "code": "while(hash > target) nonce++",
+      "name": "Proof of Work"
+    },
+    {
+      "id": "2",
+      "label": "Proof of Stake",
+      "color": "#10b981",
+      "formula": "n => 1.5 * Math.log(n + 1) + 2",
+      "code": "selectValidator(stakeWeight)",
+      "name": "Proof of Stake"
+    },
+    {
+      "id": "3",
+      "label": "Sharding",
+      "color": "#8b5cf6",
+      "formula": "n => 0.5 * Math.sqrt(n) + 1",
+      "code": "splitNetworkIntoShards(n)",
+      "name": "Sharding"
+    }
+  ]
+}
