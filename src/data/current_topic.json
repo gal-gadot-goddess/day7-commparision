@@ -1,0 +1,80 @@
+{
+  "title": "Speed Faceoff",
+  "tagline": "Compare runtime cost and success score across five real-world tasks.",
+  "xAxisLabel": "Problem size (n)",
+  "yAxisLabel": "Runtime cost (lower is better) / Score (higher is better)",
+  "curves": [
+    {
+      "id": "nn1",
+      "label": "NN: SGD Mini-batch",
+      "color": "#00FFD5",
+      "formula": "n => 6 + 0.08*n*Math.log(n+1) + 0.02*n",
+      "code": "for(epoch=0;epoch<E;epoch++){ for(b=0;b<numBatches;b++){ grad=backprop(batch); W-=lr*grad; } }",
+      "name": "NN: SGD Mini-batch"
+    },
+    {
+      "id": "db1",
+      "label": "DB: No Index",
+      "color": "#FFB000",
+      "formula": "n => 10 + 1.2*n + 0.01*(n*n)",
+      "code": "for(row in table){ if(match(row,query)) output.push(row); }",
+      "name": "DB: No Index"
+    },
+    {
+      "id": "db2",
+      "label": "DB: B-Tree Index",
+      "color": "#7C4DFF",
+      "formula": "n => 5 + 18*Math.log(n+1) + 0.12*Math.sqrt(n)",
+      "code": "node=tree.root; while(node){ node=descend(node,query); } return scanLeafRange(node,query);",
+      "name": "DB: B-Tree Index"
+    },
+    {
+      "id": "sort1",
+      "label": "Sort: Merge (Stable)",
+      "color": "#26C6DA",
+      "formula": "n => 8 + 14*n*Math.log(n+1)/100 + 0.015*n*n/100",
+      "code": "mergeSort(A){ if(A.length<=1)return A; L=mergeSort(A[:mid]); R=mergeSort(A[mid:]); return merge(L,R); }",
+      "name": "Sort: Merge (Stable)"
+    },
+    {
+      "id": "sort2",
+      "label": "Sort: Quick (Unstable)",
+      "color": "#FF4FD8",
+      "formula": "n => 10 + 11*n*Math.log(n+1)/100 + 0.0008*n*n + 5*Math.exp((n-80)/25)/(1+Math.exp((n-80)/25))",
+      "code": "quickSort(A){ if(A.length<=1) return A; p=partition(A); return quickSort(A[0:p])+[A[p]]+quickSort(A[p+1:]); }",
+      "name": "Sort: Quick (Unstable)"
+    },
+    {
+      "id": "path1",
+      "label": "Path: A* Euclid",
+      "color": "#AEEA00",
+      "formula": "n => 6 + 25*Math.log(n+1) + 0.02*n + 0.6*Math.sin(n/7)",
+      "code": "openSet.push(start); while(openSet){ cur=popLowest(openSet,f=g+h); if(cur==goal)break; for(nbr of neighbors){ tentG=g[cur]+cost; if(tentG<g[nbr]){ parent[nbr]=cur; g[nbr]=tentG; f[nbr]=g[nbr]+euclid(nbr,goal); } } }",
+      "name": "Path: A* Euclid"
+    },
+    {
+      "id": "path2",
+      "label": "Path: Dijkstra",
+      "color": "#FF7043",
+      "formula": "n => 12 + 0.35*n*Math.log(n+1) + 0.02*n + 8*Math.log(1+n/10)",
+      "code": "dist[start]=0; open=MinHeap(); open.push([0,start]); while(open){ [d,u]=open.pop(); if(u==goal)break; for(v of neighbors(u)){ nd=d+cost(u,v); if(nd<dist[v]){ dist[v]=nd; open.push([nd,v]); } } }",
+      "name": "Path: Dijkstra"
+    },
+    {
+      "id": "enc1",
+      "label": "Encrypt: AES-like",
+      "color": "#00B8FF",
+      "formula": "n => 5 + 0.18*n + 0.02*Math.sqrt(n) + 0.2*Math.log(n+1)",
+      "code": "for(round=0;round<Nr;round++){ state=SubBytes(state); state=ShiftRows(state); state=MixColumns(state); state=AddRoundKey(state); }",
+      "name": "Encrypt: AES-like"
+    },
+    {
+      "id": "enc2",
+      "label": "Encrypt: Naive RSA",
+      "color": "#FFD166",
+      "formula": "n => 8 + 0.55*n*Math.log(n+1) + 0.06*n*n/100 + 0.03*Math.pow(n,1.6)",
+      "code": "for(chunk in message){ c = modPow(chunk, e, n); output.push(c); }",
+      "name": "Encrypt: Naive RSA"
+    }
+  ]
+}
