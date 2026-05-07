@@ -1,32 +1,55 @@
 {
-  "title": "Blockchain Scalability",
-  "tagline": "Transaction latency vs network nodes.",
-  "xAxisLabel": "Number of Nodes",
-  "yAxisLabel": "Latency (s)",
+  "title": "Neural Training Race",
+  "tagline": "Relative training time vs dataset size (lower is better).",
+  "xAxisLabel": "Dataset Size (k samples)",
+  "yAxisLabel": "Relative Time (0-100)",
+  "themeColors": [
+    "#FF6EC7",
+    "#00FFD1",
+    "#FFD166",
+    "#9B59FF",
+    "#FF8A00"
+  ],
   "curves": [
     {
       "id": "1",
-      "label": "Proof of Work",
-      "color": "#f59e0b",
-      "formula": "n => 0.05 * n + 10",
-      "code": "while(hash > target) nonce++",
-      "name": "Proof of Work"
+      "label": "SGD (online)",
+      "color": "#FF6EC7",
+      "formula": "n => 0.08 * n + 8 * Math.log(n + 1)",
+      "code": "for(epoch) for(each sample) updateWeights(grad)",
+      "name": "SGD (online)"
     },
     {
       "id": "2",
-      "label": "Proof of Stake",
-      "color": "#10b981",
-      "formula": "n => 1.5 * Math.log(n + 1) + 2",
-      "code": "selectValidator(stakeWeight)",
-      "name": "Proof of Stake"
+      "label": "Mini-batch SGD",
+      "color": "#00FFD1",
+      "formula": "n => 0.06 * n + 4 * Math.sqrt(n) + 3 * Math.sin(n / 5)",
+      "code": "for(epoch) for(batches) computeBatchGrad(); updateWeights()",
+      "name": "Mini-batch SGD"
     },
     {
       "id": "3",
-      "label": "Sharding",
-      "color": "#8b5cf6",
-      "formula": "n => 0.5 * Math.sqrt(n) + 1",
-      "code": "splitNetworkIntoShards(n)",
-      "name": "Sharding"
+      "label": "Adam",
+      "color": "#FFD166",
+      "formula": "n => 0.09 * n + 12 * Math.log(n + 1) - 3 * Math.sqrt(n)",
+      "code": "maintainMoments(); for(batches) updateWithAdam()",
+      "name": "Adam"
+    },
+    {
+      "id": "4",
+      "label": "L-BFGS",
+      "color": "#9B59FF",
+      "formula": "n => 0.0035 * n * n + 0.5 * n",
+      "code": "buildLimitedMemoryApprox(); solveQuasiNewtonStep()",
+      "name": "L-BFGS"
+    },
+    {
+      "id": "5",
+      "label": "Full Newton",
+      "color": "#FF8A00",
+      "formula": "n => 0.02 * n * n + 3 * Math.log(n + 1)",
+      "code": "computeHessian(); solveLinearSystem(); updateWeights()",
+      "name": "Full Newton"
     }
   ]
 }
