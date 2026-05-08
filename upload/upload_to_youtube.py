@@ -58,7 +58,7 @@ def get_authenticated_service():
     
     return build('youtube', 'v3', credentials=creds)
 
-def upload_to_youtube(video_path, title, description, tags, category_id='22'):
+def upload_to_youtube(video_path, title, description, tags, category_id='22', thumbnail_path=None):
     """Upload video to YouTube and return result."""
     youtube = get_authenticated_service()
     
@@ -98,9 +98,22 @@ def upload_to_youtube(video_path, title, description, tags, category_id='22'):
         if status:
             print(f"[youtube] Progress: {int(status.progress() * 100)}%")
     
-    print(f"[youtube] ✅ Uploaded! Video ID: {response['id']}")
-    print(f"[youtube] URL: https://youtube.com/shorts/{response['id']}")
+    video_id = response['id']
+    print(f"[youtube] ✅ Uploaded! Video ID: {video_id}")
+    print(f"[youtube] URL: https://youtube.com/shorts/{video_id}")
     
+    # Set thumbnail if provided
+    if thumbnail_path and os.path.exists(thumbnail_path):
+        print(f"[youtube] Setting thumbnail: {thumbnail_path}")
+        try:
+            youtube.thumbnails().set(
+                videoId=video_id,
+                media_body=MediaFileUpload(thumbnail_path)
+            ).execute()
+            print("[youtube] ✅ Thumbnail set successfully!")
+        except Exception as e:
+            print(f"[youtube] ⚠️ Failed to set thumbnail: {e}")
+
     return response
 
 def main():
