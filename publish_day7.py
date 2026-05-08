@@ -45,6 +45,7 @@ def main():
     data_file = current_dir / "src/data/current_topic.json"
     metadata_file = current_dir / "metadata.json"
     video_path = current_dir / "recording.mp4"
+    thumbnail_path = current_dir / "thumbnail.jpg"
 
     # 1. Generate New Topic
     print("\n" + "="*50)
@@ -88,6 +89,8 @@ def main():
         sys.exit(1)
 
     print(f"✅ Video Recorded: {video_path}")
+    if thumbnail_path.exists():
+        print(f"✅ Thumbnail Extracted: {thumbnail_path}")
 
     # 4. Upload to Social Media
     print("\n" + "="*50)
@@ -111,7 +114,8 @@ def main():
             video_path=str(video_path),
             title=title[:100],
             description=yt_desc[:4000],
-            tags=tags_list
+            tags=tags_list,
+            thumbnail_path=str(thumbnail_path) if thumbnail_path.exists() else None
         )
         print("✅ YouTube Upload Complete!")
     except Exception as e:
@@ -121,7 +125,12 @@ def main():
     print("\n📸 [2/5] UPLOADING TO INSTAGRAM...")
     try:
         ig_caption = metadata.get("ig_caption", f"{title}\n\n{topic_tagline}\n\n{hashtags}")
-        upload_to_instagram(str(video_path), ig_caption, is_story=False)
+        upload_to_instagram(
+            str(video_path), 
+            ig_caption, 
+            is_story=False,
+            thumbnail_path=str(thumbnail_path) if thumbnail_path.exists() else None
+        )
         print("✅ Instagram Reel Upload Complete!")
     except Exception as e:
         print(f"❌ Instagram upload failed: {e}")
@@ -130,7 +139,12 @@ def main():
     print("\n📘 [3/5] UPLOADING TO FACEBOOK...")
     try:
         fb_caption = metadata.get("fb_caption", f"{title}\n\n{topic_tagline}\n\n{hashtags}")
-        upload_to_facebook(str(video_path), fb_caption, title=title[:100])
+        upload_to_facebook(
+            str(video_path), 
+            fb_caption, 
+            title=title[:100],
+            thumbnail_path=str(thumbnail_path) if thumbnail_path.exists() else None
+        )
         print("✅ Facebook Reel Upload Complete!")
     except Exception as e:
         print(f"❌ Facebook upload failed: {e}")

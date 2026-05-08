@@ -143,15 +143,31 @@ async function capture() {
             execSync(`"${ffmpeg}" -y -i "${VIDEO_PATH}" -i "${AUDIO_PATH}" -c:v copy -c:a aac -shortest "${FINAL_PATH}"`);
             console.log(`Success! Video saved to ${FINAL_PATH}`);
 
+            // Extract thumbnail at 10 seconds (or end if video is shorter)
+            const THUMBNAIL_PATH = path.join(__dirname, 'thumbnail.jpg');
+            console.log('Extracting thumbnail at 10s...');
+            execSync(`"${ffmpeg}" -y -ss 00:00:10 -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${THUMBNAIL_PATH}"`);
+            console.log(`Thumbnail saved to ${THUMBNAIL_PATH}`);
+
             // Clean up
             fs.unlinkSync(VIDEO_PATH);
             fs.unlinkSync(AUDIO_PATH);
         } catch (e) {
-            console.error('FFmpeg merge failed:', e.message);
+            console.error('FFmpeg merge/thumbnail failed:', e.message);
         }
     } else {
         console.warn('No audio captured. Saving video only.');
         fs.renameSync(VIDEO_PATH, FINAL_PATH);
+        
+        // Still try to extract thumbnail
+        const THUMBNAIL_PATH = path.join(__dirname, 'thumbnail.jpg');
+        try {
+            console.log('Extracting thumbnail at 10s...');
+            execSync(`"${ffmpeg}" -y -ss 00:00:10 -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${THUMBNAIL_PATH}"`);
+            console.log(`Thumbnail saved to ${THUMBNAIL_PATH}`);
+        } catch (e) {
+            console.error('Thumbnail extraction failed:', e.message);
+        }
     }
 
     process.exit(0);
