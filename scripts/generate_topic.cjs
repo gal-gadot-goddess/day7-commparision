@@ -16,28 +16,20 @@ if (!fs.existsSync(path.dirname(OUTPUT_FILE))) {
 }
 
 const PROMPT = `
-Generate a valid JSON object for an algorithm visualization.
-Topics: "Neural Network Training Complexity", "Database Indexing Performance", "Sorting Algorithm Stability", "Pathfinding Heuristics", "Encryption Algorithm Speed".
-Focus on visual comparison of 4-6 competing approaches.
+Generate a UNIQUE and CREATIVE JSON object for a technical algorithm visualization.
+BE CREATIVE: Do not repeat common topics. Explore diverse areas of Computer Science, Software Engineering, AI, Systems, and Math.
+Examples of areas: Data Compression, Consensus Algorithms, Memory Management, Graphics Rendering, Load Balancing, Game AI, Compiler Optimization, etc.
 
 Return ONLY raw JSON. No markdown. No reasoning.
 Rules:
-1. Title must be SHORT, SIMPLE, and catchy (max 4 words). No jargon like "Complexity Analysis". Example: "AI Speed Test", "Fastest Sort?", "Database Race".
-2. **THEME & COLORS**: Generate a UNIQUE, COHESIVE color palette for this specific topic. Avoid generic red/blue/green.
-   - Example 1 (Cyberpunk): #00FFAA, #FF00FF, #FFFF00, #00FFFF
-   - Example 2 (Sunset): #FF4500, #FFD700, #FF1493, #8A2BE2
-   - Example 3 (Forest): #00FF00, #32CD32, #ADFF2F, #228B22
-   - Ensure high contrast against black background.
-3. Formulas: standard JS math. **CRITICAL**: Formulas MUST REFLECT REAL WORLD DIFFERENCES.
+1. Title: SHORT, catchy, and professional (max 4 words).
+2. Curves: Compare 3-5 approaches/algorithms related to the topic.
+3. **VARIETY IS CRITICAL**: Every time you are called, try to pick a niche but interesting technical comparison.
+4. Formulas: standard JS math. 
    - Use the FULL range 0-100 on the Y axis.
-   - **DO NOT CLAMP** values to 100 using Math.min. If a value exceeds 100, let it go off the chart naturally (this represents infinite complexity or failure).
-   - Speed/Complexity (Time): Bad algorithms should curve UP and off the top. Good ones stay low.
-   - Accuracy/Score (Quality): Good algorithms should curve UP and asymptote towards 100.
-   - Example 1 O(n^2): "n => 0.015 * n * n" (Goes to ~150 at n=100)
-   - Example 2 O(log n): "n => 20 * Math.log(n + 1)" (Curves gently)
-   - DO NOT make all lines linear or flat. VARIETY IS KEY.
-   - Ensure curves start at appropriate values (e.g. 0 or small number).
-4. Tagline: One short sentence explaining the metric.
+   - Curves should reflect REAL performance differences (e.g., O(1), O(log n), O(n), O(n log n), O(n^2)).
+   - Do not clamp values; let them scale naturally.
+5. Tagline: One short sentence explaining the comparison.
 Structure:
 {
   "title": "TITLE",
