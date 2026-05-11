@@ -1,0 +1,32 @@
+{
+  "title": "Pathfinding Maze",
+  "tagline": "How many nodes do we visit to find the goal?",
+  "xAxisLabel": "Maze Complexity",
+  "yAxisLabel": "Nodes Visited",
+  "curves": [
+    {
+      "id": "bfs",
+      "label": "BFS (Uninformed)",
+      "color": "#f97316",
+      "formula": "n => 0.8 * n * n + 10",
+      "code": "queue.push(start); while(q) exploreAllNeighbors()",
+      "name": "BFS (Uninformed)"
+    },
+    {
+      "id": "dijkstra",
+      "label": "Dijkstra",
+      "color": "#8b5cf6",
+      "formula": "n => 0.6 * n * n + 5",
+      "code": "priorityQueue.push(start); exploreLowestCost()",
+      "name": "Dijkstra"
+    },
+    {
+      "id": "astar",
+      "label": "A* (Heuristic)",
+      "color": "#ec4899",
+      "formula": "n => 5 * n * Math.log10(n + 1) + 2",
+      "code": "priorityQueue.push(start, f=g+h); useManhattanDistance()",
+      "name": "A* (Heuristic)"
+    }
+  ]
+}

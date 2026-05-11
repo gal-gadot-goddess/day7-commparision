@@ -1,0 +1,32 @@
+{
+  "title": "Sorting Speed Test",
+  "tagline": "Visualizing O(n log n) vs O(n²) in real-time.",
+  "xAxisLabel": "Array Size",
+  "yAxisLabel": "Operations",
+  "curves": [
+    {
+      "id": "bubble",
+      "label": "Bubble Sort",
+      "color": "#ef4444",
+      "formula": "n => 0.012 * n * n",
+      "code": "for(i=0;i<n;i++) for(j=0;j<n-i-1;j++) swap()",
+      "name": "Bubble Sort"
+    },
+    {
+      "id": "quick",
+      "label": "Quick Sort",
+      "color": "#3b82f6",
+      "formula": "n => 1.5 * n * Math.log2(n + 1) / 5",
+      "code": "pivot = partition(arr); quickSort(left); quickSort(right);",
+      "name": "Quick Sort"
+    },
+    {
+      "id": "merge",
+      "label": "Merge Sort",
+      "color": "#10b981",
+      "formula": "n => 1.2 * n * Math.log2(n + 1) / 5",
+      "code": "merge(sort(left), sort(right))",
+      "name": "Merge Sort"
+    }
+  ]
+}
