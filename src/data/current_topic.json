@@ -1,32 +1,48 @@
 {
-  "title": "Blockchain Scalability",
-  "tagline": "Transaction latency vs network nodes.",
-  "xAxisLabel": "Number of Nodes",
-  "yAxisLabel": "Latency (s)",
+  "title": "Quorum Gossip",
+  "tagline": "Compare how four consensus messaging strategies trade latency for fault tolerance under spreading replicas.",
+  "xAxisLabel": "Nodes (n)",
+  "yAxisLabel": "Time Cost (0-100 scale)",
   "curves": [
     {
       "id": "1",
-      "label": "Proof of Work",
-      "color": "#f59e0b",
-      "formula": "n => 0.05 * n + 10",
-      "code": "while(hash > target) nonce++",
-      "name": "Proof of Work"
+      "label": "Two-Phase Commit",
+      "color": "#FF3B30",
+      "formula": "n => (0.02 + 0.08*Math.log2(n+1)) * n",
+      "code": "for (let n=1;n<=max;n++){ let cost=(0.02+0.08*Math.log2(n+1))*n; }",
+      "name": "Two-Phase Commit"
     },
     {
       "id": "2",
-      "label": "Proof of Stake",
-      "color": "#10b981",
-      "formula": "n => 1.5 * Math.log(n + 1) + 2",
-      "code": "selectValidator(stakeWeight)",
-      "name": "Proof of Stake"
+      "label": "Raft Leader Replication",
+      "color": "#34C759",
+      "formula": "n => 0.25*Math.log2(n+1) + 0.12*n",
+      "code": "for (let n=1;n<=max;n++){ let cost=0.25*Math.log2(n+1)+0.12*n; }",
+      "name": "Raft Leader Replication"
     },
     {
       "id": "3",
-      "label": "Sharding",
-      "color": "#8b5cf6",
-      "formula": "n => 0.5 * Math.sqrt(n) + 1",
-      "code": "splitNetworkIntoShards(n)",
-      "name": "Sharding"
+      "label": "BFT Quorum Broadcast",
+      "color": "#0A84FF",
+      "formula": "n => 0.03*n*n + 0.2*Math.log2(n+1)",
+      "code": "for (let n=1;n<=max;n++){ let cost=0.03*n*n+0.2*Math.log2(n+1); }",
+      "name": "BFT Quorum Broadcast"
+    },
+    {
+      "id": "4",
+      "label": "Gossip Anti-Entropy",
+      "color": "#FFD60A",
+      "formula": "n => 0.9*(1-Math.exp(-n/8)) * (Math.log2(n+1)*1.2)",
+      "code": "for (let n=1;n<=max;n++){ let cost=0.9*(1-Math.exp(-n/8))*(Math.log2(n+1)*1.2); }",
+      "name": "Gossip Anti-Entropy"
+    },
+    {
+      "id": "5",
+      "label": "Erasure-Failover Shards",
+      "color": "#AF52DE",
+      "formula": "n => (0.6*Math.log2(n+1) + 0.05*n) * (1 + 0.01*n)",
+      "code": "for (let n=1;n<=max;n++){ let cost=(0.6*Math.log2(n+1)+0.05*n)*(1+0.01*n); }",
+      "name": "Erasure-Failover Shards"
     }
   ]
 }
