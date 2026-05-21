@@ -1,48 +1,48 @@
 {
-  "title": "Quorum Gossip",
-  "tagline": "Compare how four consensus messaging strategies trade latency for fault tolerance under spreading replicas.",
-  "xAxisLabel": "Nodes (n)",
-  "yAxisLabel": "Time Cost (0-100 scale)",
+  "title": "Entropy Coding Duel",
+  "tagline": "Compares compression cost growth across four entropy coding strategies under increasing symbol alphabet size.",
+  "xAxisLabel": "Alphabet size (n)",
+  "yAxisLabel": "Estimated operations (0-100 scale)",
   "curves": [
     {
       "id": "1",
-      "label": "Two-Phase Commit",
-      "color": "#FF3B30",
-      "formula": "n => (0.02 + 0.08*Math.log2(n+1)) * n",
-      "code": "for (let n=1;n<=max;n++){ let cost=(0.02+0.08*Math.log2(n+1))*n; }",
-      "name": "Two-Phase Commit"
+      "label": "Static Huffman",
+      "color": "#00D1FF",
+      "formula": "n => 0.04 * Math.log2(n) * n + 2",
+      "code": "buildHistogram(staticModel); buildHuffmanTree(); encodeStreamWithCodes();",
+      "name": "Static Huffman"
     },
     {
       "id": "2",
-      "label": "Raft Leader Replication",
-      "color": "#34C759",
-      "formula": "n => 0.25*Math.log2(n+1) + 0.12*n",
-      "code": "for (let n=1;n<=max;n++){ let cost=0.25*Math.log2(n+1)+0.12*n; }",
-      "name": "Raft Leader Replication"
+      "label": "Adaptive Huffman",
+      "color": "#FFB000",
+      "formula": "n => 0.08 * n * Math.log2(n) + 5",
+      "code": "for(sym of stream){ updateFrequencies(); rebalanceOrRebuildTreeIfNeeded(); emitCode(sym); }",
+      "name": "Adaptive Huffman"
     },
     {
       "id": "3",
-      "label": "BFT Quorum Broadcast",
-      "color": "#0A84FF",
-      "formula": "n => 0.03*n*n + 0.2*Math.log2(n+1)",
-      "code": "for (let n=1;n<=max;n++){ let cost=0.03*n*n+0.2*Math.log2(n+1); }",
-      "name": "BFT Quorum Broadcast"
+      "label": "Range Coder",
+      "color": "#35FF7A",
+      "formula": "n => 0.03 * n + 3*Math.log2(n)",
+      "code": "for(sym of stream){ updateLowHigh(range, cumFreq, total); renormalize(); }",
+      "name": "Range Coder"
     },
     {
       "id": "4",
-      "label": "Gossip Anti-Entropy",
-      "color": "#FFD60A",
-      "formula": "n => 0.9*(1-Math.exp(-n/8)) * (Math.log2(n+1)*1.2)",
-      "code": "for (let n=1;n<=max;n++){ let cost=0.9*(1-Math.exp(-n/8))*(Math.log2(n+1)*1.2); }",
-      "name": "Gossip Anti-Entropy"
+      "label": "Arithmetic Coding",
+      "color": "#7A5CFF",
+      "formula": "n => 0.02 * n*n + 2*Math.log2(n) + 1",
+      "code": "for(sym of stream){ narrowInterval(cumFreq,total); while(renormalizeCondition) renormalize(); outputBitsWhenReady(); }",
+      "name": "Arithmetic Coding"
     },
     {
       "id": "5",
-      "label": "Erasure-Failover Shards",
-      "color": "#AF52DE",
-      "formula": "n => (0.6*Math.log2(n+1) + 0.05*n) * (1 + 0.01*n)",
-      "code": "for (let n=1;n<=max;n++){ let cost=(0.6*Math.log2(n+1)+0.05*n)*(1+0.01*n); }",
-      "name": "Erasure-Failover Shards"
+      "label": "rANS (tANS stack)",
+      "color": "#FF3B6A",
+      "formula": "n => 0.06 * n + 0.01 * n*n/Math.max(1, Math.log2(n))",
+      "code": "initStates(); for(sym of stream reverse){ state = xfer(state, cumFreq, total); } flushAndConvertToBits();",
+      "name": "rANS (tANS stack)"
     }
   ]
 }
