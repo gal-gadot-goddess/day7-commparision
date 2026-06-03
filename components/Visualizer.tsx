@@ -1,14 +1,16 @@
 
 import React, { useMemo } from 'react';
-import { COMPLEXITIES, VISUALIZATION_CONFIG } from '../constants';
-import { Point } from '../types';
+import { ComplexityData, Point } from '../types';
+import { TopicData } from '../constants';
 
 interface VisualizerProps {
   currentN: number;
   activeId: string;
+  complexities: ComplexityData[];
+  topicData: TopicData;
 }
 
-const Visualizer: React.FC<VisualizerProps> = ({ currentN, activeId }) => {
+const Visualizer: React.FC<VisualizerProps> = ({ currentN, activeId, complexities, topicData }) => {
   // width/height should reflect 9:16 aspect ratio properly
   const width = 1080;
   const height = 1500; // Increased to allow more vertical breathing room
@@ -26,7 +28,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ currentN, activeId }) => {
   };
 
   const paths = useMemo(() => {
-    return COMPLEXITIES.map(comp => {
+    return complexities.map(comp => {
       const points: Point[] = [];
       for (let n = 0; n <= 100; n += 0.5) {
         const val = comp.formula(n);
@@ -36,7 +38,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ currentN, activeId }) => {
         points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ');
       return { ...comp, d };
     });
-  }, []);
+  }, [complexities]);
 
   return (
     <div className="relative w-full h-full bg-[#050505] rounded-[60px] border border-white/10 overflow-hidden shadow-2xl flex flex-col items-center justify-center">
@@ -82,7 +84,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ currentN, activeId }) => {
             fontWeight="900"
             className="font-mono tracking-widest uppercase"
           >
-            {VISUALIZATION_CONFIG.xAxisLabel}
+            {topicData.xAxisLabel}
           </text>
 
           {/* Y Axis */}
