@@ -1,19 +1,27 @@
-
 import { audioService } from './services/audioService';
 (window as any).audioService = audioService;
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { COMPLEXITIES, VISUALIZATION_CONFIG } from './constants';
+import { fetchTopicData, DEFAULT_CONFIG, buildComplexities } from './constants';
+import { ComplexityData } from './types';
 import Visualizer from './components/Visualizer';
-import Terminal from './components/Terminal';
 
 const App: React.FC = () => {
   const params = new URLSearchParams(window.location.search);
   const isRecording = params.get('recording') === 'true';
 
+  const [topicData, setTopicData] = useState(DEFAULT_CONFIG);
+  const [complexities, setComplexities] = useState<ComplexityData[]>([]);
   const [currentN, setCurrentN] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const animationRef = useRef<number>(0);
+
+  useEffect(() => {
+    fetchTopicData().then((data) => {
+      setTopicData(data);
+      setComplexities(buildComplexities(data));
+    });
+  }, []);
 
   /* Expose hooks for automation */
   useEffect(() => {
@@ -68,17 +76,17 @@ const App: React.FC = () => {
       <header className={`flex flex-col gap-2 px-2 shrink-0 text-center items-center z-10 ${isRecording ? 'pt-24 mb-12' : 'pt-10 mb-6'}`}>
         <div className="flex flex-col gap-1 items-center">
           <h1 className={`${isRecording ? 'text-8xl' : 'text-5xl'} font-black tracking-tighter uppercase leading-none text-white animate-pulse shadow-lg`}>
-            {VISUALIZATION_CONFIG.title}
+            {topicData.title}
           </h1>
           <p className={`${isRecording ? 'text-4xl' : 'text-2xl'} text-[#50fa7b] italic font-medium mt-4 tracking-wide`}>
-            {VISUALIZATION_CONFIG.tagline}
+            {topicData.tagline}
           </p>
         </div>
 
         <div className="flex flex-col items-center mt-8 border-b border-white/10 pb-4 w-full">
           <div className="flex items-baseline gap-4">
             <span className={`${isRecording ? 'text-3xl' : 'text-xl'} font-bold tracking-[0.3em] text-gray-500 uppercase`}>
-              {VISUALIZATION_CONFIG.xAxisLabel}
+              {topicData.xAxisLabel}
             </span>
             <span className={`${isRecording ? 'text-6xl' : 'text-4xl'} font-mono text-blue-500 font-black shadow-[0_0_20px_rgba(59,130,246,0.5)]`}>
               {Math.floor(currentN)}
@@ -89,12 +97,12 @@ const App: React.FC = () => {
 
       <main className="flex-1 flex flex-col gap-8 min-h-0 overflow-hidden pb-10 z-10">
         <section className="flex-[9] min-h-0 relative shrink-0">
-          <Visualizer currentN={currentN} activeId="all" />
+          <Visualizer currentN={currentN} activeId="all" complexities={complexities} topicData={topicData} />
         </section>
 
         <section className="bg-white/[0.03] border border-white/10 rounded-[40px] p-8 shrink-0 z-50 backdrop-blur-xl shadow-2xl">
           <div className="flex flex-wrap justify-center gap-6">
-            {COMPLEXITIES.map(c => (
+            {complexities.map((c: ComplexityData) => (
               <div key={c.id} className="flex items-center gap-4 bg-white/5 px-6 py-3 rounded-full border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all">
                 <div
                   className="w-6 h-6 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.3)] shrink-0"
