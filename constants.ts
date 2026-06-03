@@ -42,7 +42,7 @@ export const DEFAULT_CONFIG: TopicData = {
 
 export async function fetchTopicData(): Promise<TopicData> {
   try {
-    const res = await fetch('/src/data/current_topic.json');
+    const res = await fetch(`/src/data/current_topic.json?t=${Date.now()}`);
     if (!res.ok) throw new Error('Not found');
     return await res.json();
   } catch {
