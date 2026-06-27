@@ -1,48 +1,48 @@
 {
-  "title": "Merkle Lens",
-  "tagline": "Trade off proof size, verification time, and update cost across Merkle-style commitment schemes.",
-  "xAxisLabel": "Number of leaves (n)",
-  "yAxisLabel": "Relative cost index (0-100+)",
+  "title": "Merkle-less Sync",
+  "tagline": "Compare four state-replication strategies by expected verification and update cost under adversarial changes.",
+  "xAxisLabel": "State Size (n, items)",
+  "yAxisLabel": "Expected Cost (0–100+)",
   "curves": [
     {
       "id": "1",
-      "label": "Binary Merkle Tree",
-      "color": "#4B9BFF",
-      "formula": "n => 8 + 18*Math.log2(n) + 0.02*n",
-      "code": "const log=n=>Math.log(n)/Math.log(2); let cost=8+18*log(n)+0.02*n; return cost;",
-      "name": "Binary Merkle Tree"
+      "label": "Blind Snapshot",
+      "color": "#7CFF6B",
+      "formula": "n => 0.6 * n",
+      "code": "for (let i=0;i<n;i++) verifyStateItem(i); // no proofs, full resync when changed",
+      "name": "Blind Snapshot"
     },
     {
       "id": "2",
-      "label": "Merkle Mountain Ranges",
-      "color": "#00D1B2",
-      "formula": "n => 10 + 14*Math.log2(n) + 0.015*n + 2*Math.sin(n/17)",
-      "code": "const log=n=>Math.log(n)/Math.log(2); let cost=10+14*log(n)+0.015*n+2*Math.sin(n/17); return cost;",
-      "name": "Merkle Mountain Ranges"
+      "label": "Differential Patch",
+      "color": "#00C2FF",
+      "formula": "n => 5 * Math.log(n + 1) + 0.08 * n",
+      "code": "diff = computeDiff(local, remote); for (let k=0;k<diff.length;k++) applyPatch(diff[k]); verifyPatch(diff);",
+      "name": "Differential Patch"
     },
     {
       "id": "3",
-      "label": "Sparse Merkle Tree",
-      "color": "#FFB020",
-      "formula": "n => 20 + 22*Math.log2(n) + 0.04*Math.sqrt(n) + 0.12*n/Math.max(1,Math.log2(n))",
-      "code": "const log=n=>Math.log(n)/Math.log(2); let t=Math.max(1,log(n)); let cost=20+22*log(n)+0.04*Math.sqrt(n)+0.12*n/t; return cost;",
-      "name": "Sparse Merkle Tree"
+      "label": "Random Linear Checks",
+      "color": "#FFB800",
+      "formula": "n => 20 + 0.9 * Math.sqrt(n) + 0.02 * n",
+      "code": "pickRandomCoeffs(); lhs = dot(coeffs, local); rhs = dot(coeffs, remote); verify(lhs === rhs);",
+      "name": "Random Linear Checks"
     },
     {
       "id": "4",
-      "label": "Vector Commit (Kate-style)",
-      "color": "#9B5CFF",
-      "formula": "n => 12 + 26*Math.log2(n) + 0.0009*n*n/Math.max(1,n)",
-      "code": "const log=n=>Math.log(n)/Math.log(2); let nn=n*n/Math.max(1,n); let cost=12+26*log(n)+0.0009*nn; return cost;",
-      "name": "Vector Commit (Kate-style)"
+      "label": "Segmented MAC Tree",
+      "color": "#B14DFF",
+      "formula": "n => 2 * Math.log(n + 1) + 0.15 * n * Math.log(n + 1)",
+      "code": "segments = partition(state); for (seg of segments) updateMAC(seg); verifyChangedSegments(segmentsChanged);",
+      "name": "Segmented MAC Tree"
     },
     {
       "id": "5",
-      "label": "Folded Merkle Accumulator",
+      "label": "Hot-Spot Rekeying",
       "color": "#FF4D6D",
-      "formula": "n => 6 + 10*Math.log2(n) + 0.03*n + 12/(1+Math.log2(n))",
-      "code": "const log=n=>Math.log(n)/Math.log(2); let t=log(n); let cost=6+10*t+0.03*n+12/(1+t); return cost;",
-      "name": "Folded Merkle Accumulator"
+      "formula": "n => 0.5 * n + 10 * Math.log(n + 1) + 0.0009 * n * n",
+      "code": "hot = detectHotRegions(state); for (r of hot) rekeyRegion(r); verifyRekey(r); // worst-case grows quadratically",
+      "name": "Hot-Spot Rekeying"
     }
   ]
 }
