@@ -104,7 +104,7 @@ def upload_to_instagram(video_path, caption, is_story=False, thumbnail_path=None
             if _ret == 0:
                 break
             time.sleep(5)
-        video_url = "https://raw.githubusercontent.com/" + gal-gadot-goddess + "/" + day7-commparision + "/main/" + _vid_name
+        video_url = "https://raw.githubusercontent.com/day7-commparision/main/" + _vid_name
         print("[instagram] GitHub raw URL: " + video_url)
         print(f"[instagram] 📦 Step 2: Creating Instagram {media_type} container...")
 
