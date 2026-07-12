@@ -91,24 +91,21 @@ def upload_to_instagram(video_path, caption, is_story=False, thumbnail_path=None
         # Step 1.5: Upload thumbnail if provided
         thumbnail_url = None
         if thumbnail_path and os.path.exists(thumbnail_path):
-            print(f"[instagram] 📤 Step 1.5: Uploading thumbnail to temporary hosting...")
-            with open(thumbnail_path, 'rb') as thumb_file:
-                files = {'file': ('thumb.jpg', thumb_file, 'image/jpeg')}
-                thumb_temp_res = requests.post('https://tmpfiles.org/api/v1/upload', files=files, timeout=60)
-
-            if thumb_temp_res.status_code == 200:
-                thumb_data = thumb_temp_res.json()
-                if thumb_data.get('status') == 'success':
-                    thumbnail_url = thumb_data.get('data', {}).get('url', '').replace('tmpfiles.org/', 'tmpfiles.org/dl/')
-                    print(f"[instagram] ✅ Temporary thumbnail URL created: {thumbnail_url}")
-            else:
-                print(f"[instagram] ⚠️ Failed to upload thumbnail: {thumb_temp_res.status_code}")
-
-        # Give some time for the file to be ready for external access
-        print(f"[instagram] ⏳ Waiting 5s for URL stability...")
-        time.sleep(5)
-
-        # Step 2: Create Instagram container with video URL
+        print("[instagram] Step 1: Uploading to GitHub raw URL...")
+        import subprocess as _sp, uuid as _uuid, os as _os
+        _vid_name = "ig_" + _uuid.uuid4().hex[:8] + ".mp4"
+        _os.system("cp " + str(upload_path) + " " + _vid_name)
+        _os.system("git config --global user.email bot@bot.com")
+        _os.system("git config --global user.name Bot")
+        _os.system("git add -f " + _vid_name)
+        _os.system("git commit -m \"add " + _vid_name + "\"")
+        for _ in range(3):
+            _ret = _os.system("git push origin main")
+            if _ret == 0:
+                break
+            time.sleep(5)
+        video_url = "https://raw.githubusercontent.com/" + gal-gadot-goddess + "/" + day7-commparision + "/main/" + _vid_name
+        print("[instagram] GitHub raw URL: " + video_url)
         print(f"[instagram] 📦 Step 2: Creating Instagram {media_type} container...")
 
         container_url = f"https://graph.facebook.com/v18.0/{user_id}/media"
